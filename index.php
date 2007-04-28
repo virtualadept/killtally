@@ -10,7 +10,7 @@ include "include.php";
 
 print "Welcome $username!<br> Please make your selection<br>";
 
-print "<form action=\"enter_entry.php\"><br>";
+print "<form action=\"index.php\"><br>";
 
 // Set the correct Game
 $gameid = $_GET['gameid'];
@@ -35,9 +35,44 @@ print "<input type=\"text\" name=\"foe\" maxlength=\"50\">";
 print "  Challenge Rating: ";
 print "<input type=\"text\" name=\"cr\" maxlength=\"5\">";
 
+// We are submitting this form to itself
+print "<input type=\"hidden\" name=\"mode\" value=\"submit\">";
+
+print "<br><input type=\"submit\" value=\"Kerblewie\">";
+
+
+if ($_GET['mode'] == "submit") {
+	// Hate!
+	$gameid = mysql_real_escape_string($_GET['gameid']);
+	$pcid = mysql_real_escape_string($_GET['pcid']);
+	$foe = mysql_real_escape_string($_GET['foe']);
+	$cr = mysql_real_escape_string($_GET['cr']);
+
+	if (!$gameid || !$pcid || !$foe || !$cr) {
+		print 'You forgot some parameters';
+		exit;
+	}
+
+	print "<br>Your entry of: <br>";
+
+	$enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foe,challengerating,enterer,date) VALUES (\"$gameid\",\"$pcid\",\"$foe\",\"$cr\",\"$username\",NOW())");
+
+	if ($enterkill != FALSE) {
+		// Print out the results!
+		$gamesql = mysql_query("SELECT name FROM game WHERE gameid=\"$gameid\"", $mysql); 
+		$gamename = mysql_fetch_row($gamesql);
+
+		$pcsql = mysql_query("SELECT name FROM playercharacter WHERE pcid=\"$pcid\"", $mysql); 
+		$pcname = mysql_fetch_row($pcsql);
+
+		print "<br><b>$cr</b> CR points awarded to <b>$pcname[0]</b> for the slaying of a <b>$foe</b> in the game <b>$gamename[0]</b> by <b>$username</b>";
+	} else {
+		print "Didnt get entered, something screwed up";
+	}
+}
+
 ?>
 <br>
-<input type="submit" value="Kerblewie">
 </form>
 </body>
 </html>
