@@ -1,18 +1,22 @@
-<?php
-include "include.php";
-?>
+<?php include "include.php"; ?>
 <html>
 <head>
 <title> Saved! <title>
 </head>
 <body>
-Your entry of:<br>
 <?php
 // Hate!
 $gameid = mysql_real_escape_string($_GET['gameid']);
 $pcid = mysql_real_escape_string($_GET['pcid']);
 $foe = mysql_real_escape_string($_GET['foe']);
 $cr = mysql_real_escape_string($_GET['cr']);
+
+if (!$gameid || !$pcid || !$foe || !$cr) {
+	print 'You forgot some parameters';
+	exit;
+}
+
+print "Your entry of: <br>";
 
 $enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foe,challengerating,enterer,date) VALUES (\"$gameid\",\"$pcid\",\"$foe\",\"$cr\",\"$username\",NOW())");
 
