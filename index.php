@@ -49,7 +49,7 @@ if ($_GET['mode'] == "submit") {
 	$cr = mysql_real_escape_string($_GET['cr']);
 
 	if (!$gameid || !$pcid || !$foe || !$cr) {
-		print 'You forgot some parameters';
+		print "<br><b>You forgot to fill in something</b>;
 		exit;
 	}
 
