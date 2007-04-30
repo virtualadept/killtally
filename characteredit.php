@@ -26,7 +26,7 @@ if (!$pcid && !$mode) {
 
 if ($pcid && !$mode) {
 	// Pull all character data from database
-	$pcsql = mysql_query("SELECT * FROM playercharacter WHERE pcid=\"$pcid\"");
+	$pcsql = mysql_query("SELECT * FROM playercharacter WHERE pcid=\"$pcid\"", $mysql);
 	$pchash = mysql_fetch_assoc($pcsql);
 	$pcname = $pchash['name'];
 	$pcplayer = $pchash['player'];
@@ -49,7 +49,7 @@ if ($pcid && !$mode) {
 }
 
 if ($pcid && ($mode == 'update') && $pcname && $pcplayer && $pcactive) {
-	$pcsql = mysql_query("UPDATE playercharacter SET name=\"$pcname\", player=\"$pcplayer\", active = \"$pcactive\", date = NOW(), enterer = \"$username\" WHERE pcid=\"$pcid\"");
+	$pcsql = mysql_query("UPDATE playercharacter SET name=\"$pcname\", player=\"$pcplayer\", active = \"$pcactive\", date = NOW(), enterer = \"$username\" WHERE pcid=\"$pcid\"", $mysql);
 	if (!$pcsql) {
 		print "<br><br><b>Somethings not right! Did not update!</b>";
 	} else {
@@ -69,7 +69,7 @@ if (!$pcid && $mode == 'add') {
 }
 
 if (!$pcid && ($mode == 'insert') && $pcname && $pcplayer && $pcactive) {
-	$pcsql = mysql_query("INSERT INTO playercharacter (name, player, active, date, enterer) VALUES (\"$pcname\",\"$pcplayer\",\"$pcactive\", NOW(), \"$username\")");
+	$pcsql = mysql_query("INSERT INTO playercharacter (name, player, active, date, enterer) VALUES (\"$pcname\",\"$pcplayer\",\"$pcactive\", NOW(), \"$username\")", $mysql);
 	if (!$pcsql) {
 		print "<br><br><b>Somethings not right! Did not update!</b>";
 	} else {

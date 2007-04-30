@@ -54,8 +54,8 @@ if ($gameid && !$mode) {
 }
 
 if (($mode == 'insert') && $gameid && $pcid && ($foe == 'addnew') && $cr) {
-	print "<form action=\"index.php\">";
 	print "Name of Foe: ";
+	print "<form action=\"index.php\">";
 	print "<input type=\"text\" name=\"foe\" maxlength=\"50\">";
 	print "<input type=\"hidden\" name=\"mode\" value=\"insert\">";
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
