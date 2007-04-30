@@ -7,13 +7,13 @@
 <?php
 
 $pcid = mysql_real_escape_string($_GET['pcid']);
-$save = mysql_real_escape_string($_GET['save']);
+$mode = mysql_real_escape_string($_GET['mode']);
 $pcname = mysql_real_escape_string($_GET['pcname']);
 $pcplayer = mysql_real_escape_string($_GET['pcplayer']);
 $pcactive = mysql_real_escape_string($_GET['pcactive']);
 
-if (!$pcid) {
-	print "Select character to edit: ";
+if (!$pcid && !$mode) {
+	print "Select character to edit: (<a href=\"characteredit.php?mode=add\">Add new character</a>)";
 	print "<form action=\"characteredit.php\">";
 	print "<select name=\"pcid\">";
 	$pcsql = mysql_query("SELECT pcid,name FROM playercharacter", $mysql);
@@ -24,7 +24,7 @@ if (!$pcid) {
 	print "<br><input type=\"submit\" value=\"Edit\">";
 	}
 
-if ($pcid && !$save) {
+if ($pcid && !$mode) {
 	// Pull all character data from database
 	$pcsql = mysql_query("SELECT * FROM playercharacter WHERE pcid=\"$pcid\"");
 	$pchash = mysql_fetch_assoc($pcsql);
@@ -42,21 +42,40 @@ if ($pcid && !$save) {
 	print "Played By: <input type=\"text\" name=\"pcplayer\" value=\"$pcplayer\"><br>";
 	print "Active? Yes <input type=\"radio\" name=\"pcactive\" value=\"1\" checked>";
 	print " No <input type=\"radio\" name=\"pcactive\" value=\"0\"><br>";
-	print "<input type=\"hidden\" name=\"save\" value=\"1\">";
+	print "<input type=\"hidden\" name=\"mode\" value=\"update\">";
 	print "<input type=\"hidden\" name=\"pcid\" value=\"$pcid\">";
 	print "<br><input type=\"submit\" value=\"Save\">";
 
 }
 
-if ($pcid && $save && $pcname && $pcplayer && $pcactive) {
-	$pcsql = mysql_query("UPDATE playercharacter SET name=\"$pcname\", player=\"$pcplayer\", active = \"$pcactive\", date = NOW() WHERE pcid=\"$pcid\"");
+if ($pcid && ($mode == 'update') && $pcname && $pcplayer && $pcactive) {
+	$pcsql = mysql_query("UPDATE playercharacter SET name=\"$pcname\", player=\"$pcplayer\", active = \"$pcactive\", date = NOW(), enterer = \"$username\" WHERE pcid=\"$pcid\"");
 	if (!$pcsql) {
-		print "<br><br><b>Somethings not right! Did not save!</b>";
+		print "<br><br><b>Somethings not right! Did not update!</b>";
 	} else {
 		print "Saved! <a href=\"characteredit.php\">Do Another?</a>";
 	}
 }
 
+if (!$pcid && $mode == 'add') {
+	print "Add a new character:<br>";
+	print "<form action=\"characteredit.php\">";
+	print "Name: <input type=\"text\" name=\"pcname\"><br>";
+	print "Played By: <input type=\"text\" name=\"pcplayer\"><br>";
+	print "Active? Yes <input type=\"radio\" name=\"pcactive\" value=\"1\" checked>";
+	print " No <input type=\"radio\" name=\"pcactive\" value=\"0\"><br>";
+	print "<input type=\"hidden\" name=\"mode\" value=\"insert\">";
+	print "<br><input type=\"submit\" value=\"Save\">";
+}
+
+if (!$pcid && ($mode == 'insert') && $pcname && $pcplayer && $pcactive) {
+	$pcsql = mysql_query("INSERT INTO playercharacter (name, player, active, date, enterer) VALUES (\"$pcname\",\"$pcplayer\",\"$pcactive\", NOW(), \"$username\")");
+	if (!$pcsql) {
+		print "<br><br><b>Somethings not right! Did not update!</b>";
+	} else {
+		print "Saved! <a href=\"characteredit.php\">Do Another?</a>";
+	}	
+}
 ?>
 </body>
 </html>
