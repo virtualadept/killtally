@@ -11,7 +11,6 @@ $gameid = mysql_real_escape_string($_GET['gameid']);
 $pcid = mysql_real_escape_string($_GET['pcid']);
 $foename = mysql_real_escape_string($_GET['foename']);
 $foeid = mysql_real_escape_string($_GET['foeid']);
-$cr = mysql_real_escape_string($_GET['cr']);
 
 if (!$gameid) {
 	print "Welcome $username!<br><br>";
@@ -46,28 +45,13 @@ if ($gameid && !$mode) {
 	while (list($foeid,$foename) = mysql_fetch_array($foesql)) {
 		print "<option value=\"$foeid\">$foename</option>";
 	}
-//	print "<option value=\"addnew\">Add A New Foe</option>";
 	print "</select>";
-	print "<br>Challenge Rating: ";
-	print "<input type=\"text\" name=\"cr\" maxlength=\"5\">";
 	print "<input type=\"hidden\" name=\"mode\" value=\"insert\">";
 	print "<br><input type=\"submit\" value=\"Kerblewie\">";
 }
 
-//if (($mode == 'insert') && $gameid && $pcid && ($foeid == 'addnew') && $cr) {
-//	print "Name of Foe: ";
-//	print "<form action=\"index.php\">";
-//	print "<input type=\"text\" name=\"foe\" maxlength=\"50\">";
-//	print "<input type=\"hidden\" name=\"mode\" value=\"insert\">";
-//	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
-//	print "<input type=\"hidden\" name=\"pcid\" value=\"$pcid\">";
-//	print "<input type=\"hidden\" name=\"cr\" value=\"$cr\">";
-//	print "<br><input type=\"submit\" value=\"Kerblewie\">";
-//}
-
-
-if (($mode == 'insert') && $gameid && $pcid && ($foeid != 'addnew') && $cr) {
-	$enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,challengerating,enterer,date) VALUES (\"$gameid\",\"$pcid\",\"$foeid\",\"$cr\",\"$username\",NOW())");
+if (($mode == 'insert') && $gameid && $pcid && ($foeid != 'addnew')) {
+	$enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date) VALUES (\"$gameid\",\"$pcid\",\"$foeid\",\"$username\",NOW())");
 	if ($enterkill) {
 		print "Entered!<br>";
 		print "<a href=\"index.php?gameid=$gameid\">Another One!</a>";
