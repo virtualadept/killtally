@@ -1,7 +1,7 @@
 <?php include "include.php" ?>
 <html>
 <head>
-<title>KillTally Editor</title>
+<title>Monster Editor</title>
 </head>
 <body>
 <?
@@ -13,7 +13,7 @@ $mode = mysql_real_escape_string($_GET['mode']);
 
 if (!$foeid && !$mode) {
 	print "Select Foe to Edit: ";
-	print "<form action=\"killtally.php\">";
+	print "<form action=\"monsteredit.php\">";
 	print "<select name=\"foeid\">";
 	$foesql = mysql_query("SELECT foeid,name FROM monster ORDER BY name ASC", $mysql);
 	while (list($foeid,$foe) = mysql_fetch_array($foesql)) {
@@ -27,7 +27,7 @@ if (!$foeid && !$mode) {
 if ($foeid && !$mode && ($foeid != 'addnewfoe')) {
 	print "<b>!!!WARNING!!!! THIS WILL CHANGE THE NAME OF ALL THE MONSTERS THAT USE THIS NAME !!!WARNING!!!</b><br>";
 	print "Edit Foe";
-	print "<form action=\"killtally.php\">";
+	print "<form action=\"monsteredit.php\">";
 	$foesql = mysql_query("SELECT name,cr FROM monster WHERE foeid=\"$foeid\"", $mysql);
 	list($foename,$foecr) = mysql_fetch_array($foesql);
 	print "Name: ";
@@ -41,7 +41,7 @@ if ($foeid && !$mode && ($foeid != 'addnewfoe')) {
 
 if ($foeid == 'addnewfoe') {
 	print "Add A New Monster<br>";
-	print "<form action=\"killtally.php\">";
+	print "<form action=\"monsteredit.php\">";
 	print "Name: <input type=\"text\" name=\"foename\"><br>";
 	print "CR: <input type=\"text\" name=\"foecr\"><br>";
 	print "<input type=\"hidden\" name=\"mode\" value=\"insert\">";
