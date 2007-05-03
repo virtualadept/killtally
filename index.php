@@ -10,6 +10,8 @@ $mode = mysql_real_escape_string($_GET['mode']);
 $gameid = mysql_real_escape_string($_GET['gameid']);
 $killid = mysql_real_escape_string($_GET['killid']);
 $assistid = $_GET['assistid'];
+$killdamage = $_GET['killdamage'];
+$assistdamage = $_GET['assistdamage'];
 $foename = mysql_real_escape_string($_GET['foename']);
 $foeid = mysql_real_escape_string($_GET['foeid']);
 
@@ -33,20 +35,27 @@ if ($gameid && !$mode) {
 	$gamename = mysql_fetch_row($gamesql);
 	print "You are currently running <b>$gamename[0]</b> (<a href=\"index.php\">change</a>)<br><br>";
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
-	
+
+	// Character who scored kill
 	print "Character who scored kill:<br>";
 	$charsql = mysql_query("SELECT pc.pcid,pc.name FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
 	while (list($pcid, $pcname) = mysql_fetch_row($charsql)) {
-		print "<li>$pcname <input type=radio name=\"killid\" value=\"$pcid\"><br>";
+		print "<li>$pcname <input type=radio name=\"killid\" value=\"$pcid\">";
+		print " @ <input type=text size=\"3\" name=\"killdamage[$pcid]\"> hp<br>";
 	}
-	
-	print "<br>Character(s) who assisted:<br>";
+
+	// Characters who assisted
+	print "<hr>";
+	print "Character(s) who assisted:<br>";
 	$assistsql = mysql_query("SELECT pc.pcid,pc.name FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
 	while (list($pcid,$pcname) = mysql_fetch_row($assistsql)) {
-		print "<li>$pcname <input type=\"checkbox\" name=\"assistid[]\" value=\"$pcid\"><br>";
+		print "<li>$pcname <input type=\"checkbox\" name=\"assistid[]\" value=\"$pcid\">";
+		print " @ <input type=text size=\"3\" name=\"assistdamage[$pcid]\">hp<br>";
 	}
 	
-	print "<br>Enemy Killed: ";
+	// Who did we all kill?
+	print "<hr>";
+	print "Enemy Killed: ";
 	print "<select name=\"foeid\">";
 	$foesql = mysql_query("SELECT foeid,name FROM monster ORDER BY name ASC", $mysql);
 	while (list($foeid,$foename) = mysql_fetch_array($foesql)) {
@@ -59,10 +68,12 @@ if ($gameid && !$mode) {
 
 if (($mode == 'insert') && $gameid && $killid && ($foeid != 'addnew')) {
 	// Sanity checks to make sure killid != assistid
-	foreach ($assistid as $foo) {
-		if ($killid == $foo) {
-			print "Cannot Kill and Assist!<br>";
-			exit;
+	if ($assistid) {
+		foreach ($assistid as $foo) {
+			if ($killid == $foo) {
+				print "Cannot Kill and Assist!<br>";
+				exit;
+			}
 		}
 	}
 
@@ -70,7 +81,7 @@ if (($mode == 'insert') && $gameid && $killid && ($foeid != 'addnew')) {
 	$eventid = time();
 	
 	// Process the kill first
-	$enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date,stat,eventid) VALUES (\"$gameid\",\"$killid\",\"$foeid\",\"$username\",NOW(),\"K\",\"$eventid\")");
+	$enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date,stat,eventid,damage) VALUES (\"$gameid\",\"$killid\",\"$foeid\",\"$username\",NOW(),\"K\",\"$eventid\",\"$killdamage[$killid]\")");
 	if ($enterkill) {
 		print "Entered!<br>";
 		print "<a href=\"index.php?gameid=$gameid\">Another One!</a>";
@@ -81,7 +92,8 @@ if (($mode == 'insert') && $gameid && $killid && ($foeid != 'addnew')) {
 	// Process the assists after
 	if (count($assistid) >= 1) {
 		for ($x = 0; $x < count($assistid); $x++) {
-			$enterassist = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date,stat,eventid) VALUES (\"$gameid\",\"$assistid[$x]\",\"$foeid\",\"$username\",NOW(),\"A\",\"$eventid\")");
+			$pcid = $assistid[$x];
+			$enterassist = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date,stat,eventid,damage) VALUES (\"$gameid\",\"$pcid\",\"$foeid\",\"$username\",NOW(),\"A\",\"$eventid\",\"$assistdamage[$pcid]\")");
 		}
 	}
 }
