@@ -14,6 +14,7 @@ $killdamage = $_POST['killdamage'];
 $assistdamage = $_POST['assistdamage'];
 $foename = mysql_real_escape_string($_POST['foename']);
 $foeid = mysql_real_escape_string($_POST['foeid']);
+$encounternotes = mysql_real_escape_string($_POST['encounternotes']);
 
 if (!$gameid) {
 	print "Welcome $username!<br><br>";
@@ -62,10 +63,19 @@ if ($gameid && !$mode) {
 		print "<option value=\"$foeid\">$foename</option>";
 	}
 	print "</select>";
+	
+	// Notes about the Encounter?
+	print "<hr>";
+	print "Encounter Notes:<br>";
+	print "<textarea name=\"encounternotes\" cols=\"40\" rows=\"6\"></textarea><br>";
+	
+	// Submitola!
 	print "<input type=\"hidden\" name=\"mode\" value=\"insert\">";
 	print "<br><input type=\"submit\" value=\"Enter\">";
 }
 
+
+// Ah shit, here we go with the database magic!
 if (($mode == 'insert') && $gameid && $killid && ($foeid != 'addnew')) {
 	// Sanity checks to make sure killid != assistid
 	if ($assistid) {
@@ -98,9 +108,15 @@ if (($mode == 'insert') && $gameid && $killid && ($foeid != 'addnew')) {
 			$enterassist = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date,stat,eventid,damage) VALUES (\"$gameid\",\"$pcid\",\"$foeid\",\"$username\",NOW(),\"A\",\"$eventid\",\"$assistdamage[$pcid]\")");
 		}
 	}
+	
+	// Process the encounter notes
+	if ($encounternotes) {
+		$encountersql = mysql_query("INSERT INTO encounternotes (eventid,notes) VALUES (\"$eventid\",\"$encounternotes\")", $mysql);
+	}
+
 }
 
-include "footer.php"
+include "footer.php";
 
 ?>
 <br>
