@@ -5,20 +5,20 @@
 <body>
 <?php
 
-$gameid = mysql_real_escape_string($_GET['gameid']);
-$mode = mysql_real_escape_string($_GET['mode']);
-$gameid = mysql_real_escape_string($_GET['gameid']);
-$killid = mysql_real_escape_string($_GET['killid']);
-$assistid = $_GET['assistid'];
-$killdamage = $_GET['killdamage'];
-$assistdamage = $_GET['assistdamage'];
-$foename = mysql_real_escape_string($_GET['foename']);
-$foeid = mysql_real_escape_string($_GET['foeid']);
+$gameid = mysql_real_escape_string($_POST['gameid']);
+$mode = mysql_real_escape_string($_POST['mode']);
+$gameid = mysql_real_escape_string($_POST['gameid']);
+$killid = mysql_real_escape_string($_POST['killid']);
+$assistid = $_POST['assistid'];
+$killdamage = $_POST['killdamage'];
+$assistdamage = $_POST['assistdamage'];
+$foename = mysql_real_escape_string($_POST['foename']);
+$foeid = mysql_real_escape_string($_POST['foeid']);
 
 if (!$gameid) {
 	print "Welcome $username!<br><br>";
 	print "First off, please select which game you wish to administer: ";
-	print "<form action=\"index.php?gameid=$gameid\"><br>";
+	print "<form action=\"index.php\" method=\"post\"><br>";
 	print "<select name=\"gameid\">";
 	$game = mysql_query("SELECT * FROM game where active=\"1\"", $mysql);
 	while (list($gameid, $gamename) = mysql_fetch_row($game)) {
@@ -30,7 +30,7 @@ if (!$gameid) {
 
 if ($gameid && !$mode) {
 	print "Welcome $username!<br> Please make your selection<br>";
-	print "<form action=\"index.php\"><br>";
+	print "<form action=\"index.php\" method=\"post\"><br>";
 	$gamesql = mysql_query("SELECT name FROM game WHERE gameid=\"$gameid\"", $mysql);
 	$gamename = mysql_fetch_row($gamesql);
 	print "You are currently running <b>$gamename[0]</b> (<a href=\"index.php\">change</a>)<br><br>";
@@ -41,7 +41,7 @@ if ($gameid && !$mode) {
 	$charsql = mysql_query("SELECT pc.pcid,pc.name FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
 	while (list($pcid, $pcname) = mysql_fetch_row($charsql)) {
 		print "<li>$pcname <input type=radio name=\"killid\" value=\"$pcid\">";
-		print " @ <input type=text size=\"3\" name=\"killdamage[$pcid]\"> hp<br>";
+		print " @ <input type=text size=\"3\" maxlength=\"3\" name=\"killdamage[$pcid]\"> hp<br>";
 	}
 
 	// Characters who assisted
@@ -50,7 +50,7 @@ if ($gameid && !$mode) {
 	$assistsql = mysql_query("SELECT pc.pcid,pc.name FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
 	while (list($pcid,$pcname) = mysql_fetch_row($assistsql)) {
 		print "<li>$pcname <input type=\"checkbox\" name=\"assistid[]\" value=\"$pcid\">";
-		print " @ <input type=text size=\"3\" name=\"assistdamage[$pcid]\">hp<br>";
+		print " @ <input type=text size=\"3\" maxlength=\"3\" name=\"assistdamage[$pcid]\">hp<br>";
 	}
 	
 	// Who did we all kill?
@@ -84,7 +84,9 @@ if (($mode == 'insert') && $gameid && $killid && ($foeid != 'addnew')) {
 	$enterkill = mysql_query("INSERT INTO killtally (gameid,pcid,foeid,enterer,date,stat,eventid,damage) VALUES (\"$gameid\",\"$killid\",\"$foeid\",\"$username\",NOW(),\"K\",\"$eventid\",\"$killdamage[$killid]\")");
 	if ($enterkill) {
 		print "Entered!<br>";
-		print "<a href=\"index.php?gameid=$gameid\">Another One!</a>";
+		print "<form action=\"index.php\" method=\"post\">";
+		print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
+		print "<br><input type=\"submit\" value=\"Do Another?\">";
 	} else {
 		print "Didnt get entered, something screwed up";
 	}
