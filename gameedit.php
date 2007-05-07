@@ -36,7 +36,7 @@ if ($gameid && !$mode && ($gameid != 'addnewgame')) {
         print "<li>Active: ";
         print "Yes <input type=\"radio\" name=\"active\" value=\"1\" checked>";
         print "No <input type=\"radio\" name=\"active\" value=\"0\">";
-	print "<li> Characters Involved<br>";
+	print "<li>Characters Involved<br>";
 	
 	// Pull data from whowhere table to see who's in what game
 	$wwsql = mysql_query("SELECT pcid FROM whowhere WHERE gameid=\"$gameid\"",$mysql);
