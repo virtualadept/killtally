@@ -26,7 +26,7 @@ if (!$gameid) {
         	print "<option value=\"$gameid\">$gamename</option>";
 	}
 	print "</select><br><br>";
-	print "<input type=\"submit\" value=\"Save\">";
+	print "<input type=\"submit\" value=\"Go!\">";
 	print "</form>";
 }
 

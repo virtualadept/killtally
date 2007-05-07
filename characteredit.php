@@ -48,12 +48,12 @@ if ($pcid && !$mode) {
 
 }
 
-if ($pcid && ($mode == 'update') && $pcname && $pcplayer && $pcactive) {
+if ($pcid && ($mode == 'update') && $pcname && $pcplayer) {
 	$pcsql = mysql_query("UPDATE playercharacter SET name=\"$pcname\", player=\"$pcplayer\", active = \"$pcactive\", date = NOW(), enterer = \"$username\" WHERE pcid=\"$pcid\"", $mysql);
-	if (!$pcsql) {
-		print "<br><br><b>Somethings not right! Did not update!</b>";
-	} else {
+	if ($pcsql) {
 		print "Saved! <a href=\"characteredit.php\">Do Another?</a>";
+	} else {
+		print "<br><br><b>Somethings not right! Did not update!</b>";
 	}
 }
 
@@ -77,5 +77,8 @@ if (!$pcid && ($mode == 'insert') && $pcname && $pcplayer && $pcactive) {
 	}	
 }
 ?>
+
+<?php include "footer.php" ?>
+
 </body>
 </html>
