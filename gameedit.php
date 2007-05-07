@@ -21,7 +21,7 @@ if (!$gameid) {
 	print "<input type=\"submit\" value=\"Edit Game\">";
 }
 
-if ($gameid && !mode && ($gameid != 'addnewgame')) {
+if ($gameid && !$mode && ($gameid != 'addnewgame')) {
 	print "Edit Game: ";
         print "<form action=\"gameedit.php\">";
         $gamesql = mysql_query("SELECT name,active,date FROM game WHERE gameid=\"$gameid\"", $mysql);
@@ -32,10 +32,30 @@ if ($gameid && !mode && ($gameid != 'addnewgame')) {
         print "<li>Active: ";
         print "Yes <input type=\"radio\" name=\"active\" value=\"1\" checked>";
         print "No <input type=\"radio\" name=\"active\" value=\"0\">";
-        print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
+	print "<li> Characters Involved<br>";
+	
+	// Pull data from whowhere table to see who's in what game
+	$wwsql = mysql_query("SELECT pcid FROM whowhere WHERE gameid=\"$gameid\"",$mysql);
+	while (list($wwsqlout) = mysql_fetch_array($wwsql)) {
+		$wwpcid["$wwsqlout"] = "1";
+	}
+
+	// Get all characters and flag the ones that are in the game already
+	$charnamesql = mysql_query("SELECT pcid,name FROM playercharacter",$mysql);
+	while (list($pcid,$pcname) = mysql_fetch_array($charnamesql)) {
+		$charselect =  "<input type=\"checkbox\" name=\"whowhere[]\" value=\"$pcid\"";
+		if (isset($wwpcid["$pcid"])) {
+			$charselect .= " checked>$pcname<br>";
+		} else {
+			$charselect .= ">$pcname<br>";
+		}
+		print $charselect;
+	}
+	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
         print "<input type=\"hidden\" name=\"mode\" value=\"update\">";
         print "<br><input type=\"submit\" value=\"Save Changes\">";
 }
+
 
 
 

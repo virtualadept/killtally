@@ -27,6 +27,7 @@ if (!$gameid) {
 	}
 	print "</select><br><br>";
 	print "<input type=\"submit\" value=\"Save\">";
+	print "</form>";
 }
 
 if ($gameid && !$mode) {
