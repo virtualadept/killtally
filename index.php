@@ -40,18 +40,18 @@ if ($gameid && !$mode) {
 
 	// Character who scored kill
 	print "Character who scored kill:<br>";
-	$charsql = mysql_query("SELECT pc.pcid,pc.name FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
-	while (list($pcid, $pcname) = mysql_fetch_row($charsql)) {
-		print "<li>$pcname <input type=radio name=\"killid\" value=\"$pcid\">";
+	$charsql = mysql_query("SELECT pc.pcid,pc.name,pc.player FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
+	while (list($pcid,$pcname,$pcplayer) = mysql_fetch_row($charsql)) {
+		print "<li>$pcname ($pcplayer)<input type=radio name=\"killid\" value=\"$pcid\">";
 		print " @ <input type=text size=\"3\" maxlength=\"3\" name=\"killdamage[$pcid]\"> hp<br>";
 	}
 
 	// Characters who assisted
 	print "<hr>";
 	print "Character(s) who assisted:<br>";
-	$assistsql = mysql_query("SELECT pc.pcid,pc.name FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
-	while (list($pcid,$pcname) = mysql_fetch_row($assistsql)) {
-		print "<li>$pcname <input type=\"checkbox\" name=\"assistid[]\" value=\"$pcid\">";
+	$assistsql = mysql_query("SELECT pc.pcid,pc.name,pc.player FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\"",$mysql);
+	while (list($pcid,$pcname,$pcplayer) = mysql_fetch_row($assistsql)) {
+		print "<li>$pcname ($pcplayer)<input type=\"checkbox\" name=\"assistid[]\" value=\"$pcid\">";
 		print " @ <input type=text size=\"3\" maxlength=\"3\" name=\"assistdamage[$pcid]\">hp<br>";
 	}
 	
