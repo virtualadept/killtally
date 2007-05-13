@@ -45,13 +45,13 @@ if ($gameid && !$mode && ($gameid != 'addnewgame')) {
 	}
 
 	// Get all characters and flag the ones that are in the game already
-	$charnamesql = mysql_query("SELECT pcid,name FROM playercharacter WHERE active=\"1\"",$mysql);
-	while (list($pcid,$pcname) = mysql_fetch_array($charnamesql)) {
+	$charnamesql = mysql_query("SELECT pcid,name,player FROM playercharacter WHERE active=\"1\"",$mysql);
+	while (list($pcid,$pcname,$player) = mysql_fetch_array($charnamesql)) {
 		$charselect =  "<input type=\"checkbox\" name=\"whowhere[]\" value=\"$pcid\"";
 		if (isset($wwpcid["$pcid"])) {
-			$charselect .= " checked>$pcname (<a href=\"characteredit.php?pcid=$pcid\">Edit</a>)<br>";
+			$charselect .= " checked>$pcname ($player) <a href=\"characteredit.php?pcid=$pcid\">Edit</a><br>";
 		} else {
-			$charselect .= ">$pcname (<a href=\"characteredit.php?pcid=$pcid\">Edit</a>)<br>";
+			$charselect .= ">$pcname ($player) <a href=\"characteredit.php?pcid=$pcid\">Edit</a><br>";
 		}
 		print $charselect;
 	}

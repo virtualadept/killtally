@@ -16,9 +16,9 @@ if (!$pcid && !$mode) {
 	print "Select character to edit: (<a href=\"characteredit.php?mode=add\">Add new character</a>)";
 	print "<form action=\"characteredit.php\">";
 	print "<select name=\"pcid\">";
-	$pcsql = mysql_query("SELECT pcid,name FROM playercharacter", $mysql);
-	while (list($pcid, $pcname) = mysql_fetch_row($pcsql)) {
-		print "<option value=\"$pcid\">$pcname</option>";
+	$pcsql = mysql_query("SELECT pcid,name,player FROM playercharacter", $mysql);
+	while (list($pcid, $pcname, $player) = mysql_fetch_row($pcsql)) {
+		print "<option value=\"$pcid\">$pcname ($player)</option>";
 	}
 	print "</select><br>";
 	print "<br><input type=\"submit\" value=\"Edit\">";
