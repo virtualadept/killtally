@@ -21,7 +21,7 @@ if (!$gameid) {
 	print "First off, please select which game you wish to administer: ";
 	print "<form action=\"index.php\" method=\"post\"><br>";
 	print "<select name=\"gameid\">";
-	$game = mysql_query("SELECT * FROM game where active=\"1\"", $mysql);
+	$game = mysql_query("SELECT * FROM game where active=\"1\" ORDER BY name ASC", $mysql);
 	while (list($gameid, $gamename) = mysql_fetch_row($game)) {
         	print "<option value=\"$gameid\">$gamename</option>";
 	}
