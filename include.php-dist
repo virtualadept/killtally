@@ -4,7 +4,7 @@ $username = "{$_SERVER['PHP_AUTH_USER']}";
 
 // Connect to MySQL
 
-$mysql = mysql_connect("localhost", "dndkilltally", "thisisyourpassword");
+$mysql = mysql_connect("localhost", "databasename", "dbpassword");
 if (!$mysql) {
 	printf("Cannot connect to database: %s\n", mysql_connect_error());
 	exit;
