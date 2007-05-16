@@ -12,6 +12,7 @@ $itemid = mysql_real_escape_string($_GET['itemid']);
 $destid = $_GET['destid'];
 $hpadj = mysql_real_escape_string($_GET['hpadj']);
 $sthrow = mysql_real_escape_string($_GET['sthrow']);
+$kill = mysql_real_escape_string($_GET['kill']);
 
 if (!$gameid) {
         print "Welcome $username!<br><br>";
@@ -28,6 +29,10 @@ if (!$gameid) {
 }
 
 if ($gameid) {
+
+
+	
+	
 	print "Enter player action!<br><br>";
         $gamesql = mysql_query("SELECT name FROM game WHERE gameid=\"$gameid\"", $mysql);
         $gamename = mysql_fetch_row($gamesql);
@@ -55,7 +60,7 @@ if ($gameid) {
 	
 	print "<select name=\"sourceid\">";
 	print "$pcmonlist";
-	print "</select><br><hr><br>";
+	print "</select><hr>";
 
 	// ------------- //
 
@@ -86,7 +91,7 @@ if ($gameid) {
 	while (list ($itemid,$itemcat,$itemname) = mysql_fetch_row($itemsql)) {
 		print "<option value=\"$itemid\">$itemname ($itemcat)</option>";
 	}
-	print "</select><br><hr><br>";
+	print "</select><hr>";
 
 	// -------------- //
 
@@ -95,7 +100,7 @@ if ($gameid) {
 	for ($i=0; $i<5; $i++) {
 		print "<select name=\"destid[]\"> $pcmonlist </select><br>";
 	}
-	print "<br><hr><br>";
+	print "<hr>";
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
 
 	// ------------- //
@@ -103,15 +108,22 @@ if ($gameid) {
 	// DAMAGE/HEALED ($hpadj)
 	print "<li>Hit Point Adjustment (Damage/Healed): ";
 	print "<input type=\"text\" name=\"hpadj\">";
-	print "<br><hr><br>";
+	print "<hr>";
 
 	// ------------ //
 
 	// SAVING THROW ($sthrow)
-	print "<li>Saving Throw: ";
-	print "Succeeded <input type=\"radio\" name=\"sthrow\" value=\"Y\">";
-	print "Failed <input type=\"radio\" name=\"sthrow\" value=\"N\">";
+	print "<li>Saving Throw:<br> ";
+	print "<input type=\"radio\" name=\"sthrow\" value=\"Y\">Succeeded<br>";
+	print "<input type=\"radio\" name=\"sthrow\" value=\"N\">Failed<br>";
+	print "<hr>";
 	
+	// ------------ //
+
+	// Enemy Killed? ($kill)
+	print "<li> Enemy Killed? ";
+	print "<input type=\"checkbox\" name=\"kill\" value=\"Y\">";
+	print "<br><br>";
 
 
 	print "<br><input type=\"submit\" value=\"Enter\">";
