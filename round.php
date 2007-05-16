@@ -73,24 +73,25 @@ if ($gameid) {
 		$encountersql = mysql_query("INSERT IGNORE INTO encounternotes (eventid,notes,date) values (\"$eventid\", \"$encounternotes\",NOW())",$mysql);
 	}
 
-	print "Enter hot player-on-player action $username!<br>";
-	
 	// EventID with Reset Button
-	print "The EncounterID is <b>$eventid</b>";
 	print "<form action=\"round.php\" method=\"post\">";
 	print "<input type=\"hidden\" name=\"eventidreset\" value=\"1\">";
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
-	print "<input type=\"submit\" value=\"Reset for new encounter!\"><br>";
+	print "Welcome $username, the EncounterID is <b>$eventid</b> <input type=\"submit\" value=\"New Encounter?\"><br>";
 	print "</form>";
 
 	// What game are we playing?
         $gamesql = mysql_query("SELECT name FROM game WHERE gameid=\"$gameid\"", $mysql);
         $gamename = mysql_fetch_row($gamesql);
-        print "You are currently running <b>$gamename[0]</b> (<a href=\"round.php\">change</a>)<br><br>";
+        print "You are currently running <b>$gamename[0]</b> (<a href=\"round.php\">change</a>)<br>";
 	
 	// Start the Form of D00m
 	print "<form action=\"round.php\" method=\"post\">";
-	
+
+	// Put the enter button up here so people on laptops dont have to scroll
+	print "<br><input type=\"submit\" value=\"Enter Round Data\"><-- This is here so you dont have to scroll down";
+	print "<hr>";
+
 	// SOURCE ($sourceid)
 	print "<li>Source: ";
 		// Because we'll have to generate this same data about 100 times, save the list in a variable
@@ -156,10 +157,11 @@ if ($gameid) {
 	        print "Save: ";
         	print "<input type=\"radio\" name=\"sthrow[$i]\" value=\"M\">Made";
         	print " <input type=\"radio\" name=\"sthrow[$i]\" value=\"F\">Fail";
-		print " | Killed? <input type=\"checkbox\" name=\"kill[$i]\" value=\"Y\">";
-		print " | HP: <input type=\"text\" size=4 name=\"hpadj[$i]\">";
-        	print "<input type=\"radio\" name=\"hpadjtype[$i]\" value=\"D\" checked>Damage";
-        	print " <input type=\"radio\" name=\"hpadjtype[$i]\" value=\"H\">Heal<br>";
+		print " /|\ HP: <input type=\"text\" size=4 name=\"hpadj[$i]\">";
+        	print " (<input type=\"radio\" name=\"hpadjtype[$i]\" value=\"D\" checked>Damage";
+        	print " <input type=\"radio\" name=\"hpadjtype[$i]\" value=\"H\">Heal)";
+		print " /|\ Killed? <input type=\"checkbox\" name=\"kill[$i]\" value=\"Y\">";
+		print "<br>";
 	}
 	print "<hr>";
 
@@ -175,8 +177,13 @@ if ($gameid) {
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
 	print "<input type=\"hidden\" name=\"eventid\" value=\"$eventid\">";
 	print "<input type=\"hidden\" name=\"mode\" value=\"save\">";
-	print "<br><input type=\"submit\" value=\"Enter\">";
+	print "<br><input type=\"submit\" value=\"Enter Round Data\">";
 
 	print "</form>";
 }
+
 ?>
+
+<?php include "footer.php" ?>
+</body>
+</html>
