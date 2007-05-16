@@ -15,6 +15,7 @@ $itemid = mysql_real_escape_string($_POST['itemid']);
 $encounternotes = mysql_real_escape_string($_POST['encounternotes']);
 $destid = $_POST['destid'];
 $hpadj = $_POST['hpadj'];
+$hpadjtype = $_POST['hpadjtype'];
 $sthrow = $_POST['sthrow'];
 $kill = $_POST['kill'];
 
@@ -51,9 +52,12 @@ if ($gameid) {
 			if ($hpadj) {
 				$hp = $hpadj[$x];
 			}
+			if ($hpadjtype) {
+				$hptype = $hpadjtype[$x];
+			}
 			list ($desttype,$did) = split("-",$dest);
 			if ($did > 0) {  // Holy shit this is a kludge
-				$enterstat = mysql_query("INSERT INTO stattally (eventid, gameid, sourcetype, sourceid, actionid, spellid, itemid, desttype, destid, hpadj, sthrow, destkill, date, enterer) values (\"$eventid\", \"$gameid\", \"$sourcetype\",\"$sid\",\"$actionid\",\"$spellid\",\"$itemid\",\"$desttype\",\"$did\",\"$hp\",\"$st\",\"$ded\",NOW(),\"$username\")",$mysql);
+				$enterstat = mysql_query("INSERT INTO stattally (eventid, gameid, sourcetype, sourceid, actionid, spellid, itemid, desttype, destid, hpadj, hpadjtype, sthrow, destkill, date, enterer) values (\"$eventid\", \"$gameid\", \"$sourcetype\",\"$sid\",\"$actionid\",\"$spellid\",\"$itemid\",\"$desttype\",\"$did\",\"$hp\", \"$hptype\",\"$st\",\"$ded\",NOW(),\"$username\")",$mysql);
 			}
 		}
 		if ($enterstat) {
@@ -143,15 +147,17 @@ if ($gameid) {
 
 	// -------------- //
 
-	// DESTINATION ($destid), HPADJUSTMENT ($hpadj), SAVES ($sthrow)
+	// DESTINATION ($destid), HPADJUSTMENT ($hpadj), SAVES ($sthrow), HPTYPE ($hpadjtype)
 	print "<li>Destination:<br> ";
 	for ($i=0; $i<5; $i++) {
 		print "<select name=\"destid[]\"> $pcmonlist </select>";
-	        print "Save Throw: ";
+	        print "Save: ";
         	print "<input type=\"radio\" name=\"sthrow[$i]\" value=\"M\">Made";
         	print " <input type=\"radio\" name=\"sthrow[$i]\" value=\"F\">Fail";
 		print " | Killed? <input type=\"checkbox\" name=\"kill[$i]\" value=\"Y\">";
-		print " | HP: <input type=\"text\" size=4 name=\"hpadj[$i]\"><br>";
+		print " | HP: <input type=\"text\" size=4 name=\"hpadj[$i]\">";
+        	print "<input type=\"radio\" name=\"hpadjtype[$i]\" value=\"D\" checked>Damage";
+        	print " <input type=\"radio\" name=\"hpadjtype[$i]\" value=\"H\">Heal<br>";
 	}
 	print "<hr>";
 
