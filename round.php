@@ -96,7 +96,7 @@ if ($gameid) {
 	while (list($pcid, $pcname, $pcplayer) = mysql_fetch_row($pcidsql)) {
 		$pcmonlist .= "<option value=\"P-$pcid\">$pcname ($pcplayer) ($pcid)</option>";
 	}
-	print "<option value=\"\"> </option>";
+	$pcmonlist .= "<option value=\"\"> </option>";
 	
 		// Now lets get the monsters
 	$pcmonlist .= "<option value=\"\"> ---Monsters---</option>";
