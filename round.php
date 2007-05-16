@@ -52,7 +52,7 @@ if ($gameid) {
 			}
 			list ($desttype,$did) = split("-",$dest);
 			if ($did > 0) {  // Holy shit this is a kludge
-				$enterstat = mysql_query("INSERT INTO stattally (eventid, sourcetype, sourceid, actionid, spellid, itemid, desttype, destid, hpadj, sthrow, destkill, date, enterer) values (\"$eventid\",\"$sourcetype\",\"$sid\",\"$actionid\",\"$spellid\",\"$itemid\",\"$desttype\",\"$did\",\"$hp\",\"$st\",\"$ded\",NOW(),\"$username\")",$mysql);
+				$enterstat = mysql_query("INSERT INTO stattally (eventid, gameid, sourcetype, sourceid, actionid, spellid, itemid, desttype, destid, hpadj, sthrow, destkill, date, enterer) values (\"$eventid\", \"$gameid\", \"$sourcetype\",\"$sid\",\"$actionid\",\"$spellid\",\"$itemid\",\"$desttype\",\"$did\",\"$hp\",\"$st\",\"$ded\",NOW(),\"$username\")",$mysql);
 			}
 		}
 		if ($enterstat) {
