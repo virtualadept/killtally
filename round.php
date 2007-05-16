@@ -72,11 +72,11 @@ if ($gameid) {
 	print "Enter hot player-on-player action $username!<br>";
 	
 	// EventID with Reset Button
-	print "The eventid is <b>$eventid</b>";
+	print "The EncounterID is <b>$eventid</b>";
 	print "<form action=\"round.php\" method=\"post\">";
 	print "<input type=\"hidden\" name=\"eventidreset\" value=\"1\">";
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
-	print "<input type=\"submit\" value=\"Reset EventID\"><br>";
+	print "<input type=\"submit\" value=\"Reset for new encounter!\"><br>";
 	print "</form>";
 
 	// What game are we playing?
