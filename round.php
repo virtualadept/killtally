@@ -94,7 +94,7 @@ if ($gameid) {
 	$pcmonlist = "<option value=\"\"> ---Characters---</option>";
 	$pcidsql = mysql_query("SELECT pc.pcid,pc.name,pc.player FROM playercharacter pc JOIN whowhere ww USING(pcid) JOIN game g USING(gameid) WHERE g.gameid = \"$gameid\" ORDER BY pc.name ASC",$mysql);
 	while (list($pcid, $pcname, $pcplayer) = mysql_fetch_row($pcidsql)) {
-		$pcmonlist .= "<option value=\"P-$pcid\">$pcname ($pcplayer) ($pcid)</option>";
+		$pcmonlist .= "<option value=\"P-$pcid\">$pcname ($pcplayer)</option>";
 	}
 	$pcmonlist .= "<option value=\"\"> </option>";
 	
@@ -103,7 +103,7 @@ if ($gameid) {
 	$pcmonlist .= "<option value=\"\"> </option>";
 	$monidsql = mysql_query("SELECT id,name FROM monster ORDER BY name ASC", $mysql);
 	while (list ($monid,$monname) = mysql_fetch_row($monidsql)) {
-		$pcmonlist .= "<option value=\"M-$monid\">$monname ($monid)</option>";
+		$pcmonlist .= "<option value=\"M-$monid\">$monname</option>";
 	}
 	
 	print "<select name=\"sourceid\">";
