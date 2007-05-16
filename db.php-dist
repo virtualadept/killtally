@@ -1,0 +1,8 @@
+<?php
+$mysql = mysql_connect("localhost", "databasename", "dbpassword");
+if (!$mysql) {
+        printf("Cannot connect to database: %s\n", mysql_connect_error());
+        exit;
+}
+mysql_select_db("dndkilltally", $mysql);
+?>
