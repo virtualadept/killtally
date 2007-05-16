@@ -120,6 +120,8 @@ if ($gameid) {
 	print "<li>Method:<br> ";
 		// Attack
 	print "<input type=\"radio\" name=\"actionid\" value=\"A\"> Attack<br>";
+		// Hold Action
+	print "<input type=\"radio\" name=\"actionid\" value=\"H\"> Hold Action<br>";
 		// Spell
 	print "<input type=\"radio\" name=\"actionid\" value=\"S\"> Spell  ";
 	print "<select name=\"spellid\">";
