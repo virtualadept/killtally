@@ -12,6 +12,7 @@ $sourceid = mysql_real_escape_string($_POST['sourceid']);
 $actionid = mysql_real_escape_string($_POST['actionid']);
 $spellid = mysql_real_escape_string($_POST['spellid']);
 $itemid = mysql_real_escape_string($_POST['itemid']);
+$encounternotes = mysql_real_escape_string($_POST['encounternotes']);
 $destid = $_POST['destid'];
 $hpadj = $_POST['hpadj'];
 $sthrow = $_POST['sthrow'];
@@ -57,12 +58,17 @@ if ($gameid) {
 		}
 		if ($enterstat) {
 			print "Success! Do Another!<br>";
+			print "<hr>";
 		} else {
 			print "Something went wrong<br>";
 	
 		}
 	}
 	
+	if ($encounternotes) {
+		$encountersql = mysql_query("INSERT IGNORE INTO encounternotes (eventid,notes,date) values (\"$eventid\", \"$encounternotes\",NOW())",$mysql);
+	}
+
 	print "Enter hot player-on-player action $username!<br>";
 	
 	// EventID with Reset Button
@@ -148,6 +154,15 @@ if ($gameid) {
 		print " | HP: <input type=\"text\" size=4 name=\"hpadj[$i]\"><br>";
 	}
 	print "<hr>";
+
+
+	// -------------- //
+
+	// Encounter Notes
+        print "Encounter Notes:<br>";
+        print "<textarea name=\"encounternotes\" value=\"$encounternotes\" cols=\"40\" rows=\"6\"></textarea><br>";
+
+
 
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
 	print "<input type=\"hidden\" name=\"eventid\" value=\"$eventid\">";
