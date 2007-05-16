@@ -59,7 +59,7 @@ if ($gameid && !$mode) {
 	print "<hr>";
 	print "Enemy Killed: ";
 	print "<select name=\"foeid\">";
-	$foesql = mysql_query("SELECT foeid,name FROM monster ORDER BY name ASC", $mysql);
+	$foesql = mysql_query("SELECT id,name FROM monster ORDER BY name ASC", $mysql);
 	while (list($foeid,$foename) = mysql_fetch_array($foesql)) {
 		print "<option value=\"$foeid\">$foename</option>";
 	}

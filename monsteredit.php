@@ -15,7 +15,7 @@ if (!$foeid && !$mode) {
 	print "Select Foe to Edit: ";
 	print "<form action=\"monsteredit.php\">";
 	print "<select name=\"foeid\">";
-	$foesql = mysql_query("SELECT foeid,name FROM monster ORDER BY name ASC", $mysql);
+	$foesql = mysql_query("SELECT id,name FROM monster ORDER BY name ASC", $mysql);
 	while (list($foeid,$foe) = mysql_fetch_array($foesql)) {
 		print "<option value=\"$foeid\">$foe</option>";
 	}
@@ -28,7 +28,7 @@ if ($foeid && !$mode && ($foeid != 'addnewfoe')) {
 	print "<b>!!!WARNING!!!! THIS WILL CHANGE THE NAME OF ALL THE MONSTERS THAT USE THIS NAME !!!WARNING!!!</b><br>";
 	print "Edit Foe";
 	print "<form action=\"monsteredit.php\">";
-	$foesql = mysql_query("SELECT name,cr FROM monster WHERE foeid=\"$foeid\"", $mysql);
+	$foesql = mysql_query("SELECT name,challenge_rating FROM monster WHERE id=\"$foeid\"", $mysql);
 	list($foename,$foecr) = mysql_fetch_array($foesql);
 	print "Name: ";
 	print "<input type=\"text\" name=\"foename\" value=\"$foename\">";
@@ -49,7 +49,7 @@ if ($foeid == 'addnewfoe') {
 }
 
 if (($mode == 'insert') && $foename && $foecr) {
-	$foeaddsql = mysql_query("INSERT INTO monster (name,cr) VALUES (\"$foename\",\"$foecr\")", $mysql);
+	$foeaddsql = mysql_query("INSERT INTO monster (name,challenge_rating) VALUES (\"$foename\",\"$foecr\")", $mysql);
 	if ($foeaddsql) {
 		print "Insert Successful";
 	} else {
@@ -58,7 +58,7 @@ if (($mode == 'insert') && $foename && $foecr) {
 }
 
 if ($foename && ($mode = 'update') && $foeid && $foecr) {
-	$foeupdate = mysql_query("UPDATE monster SET name=\"$foename\" , cr=\"$foecr\" WHERE foeid=\"$foeid\"", $mysql);
+	$foeupdate = mysql_query("UPDATE monster SET name=\"$foename\" , challenge_rating=\"$foecr\" WHERE id=\"$foeid\"", $mysql);
 	if ($foeupdate) {
 		print "Success";
 	} else {
