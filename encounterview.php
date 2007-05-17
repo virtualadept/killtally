@@ -80,12 +80,35 @@ if ($gameid && $eventid) {
 			$desttype = "monster";
 			$id = "id";
 		}
-
+		
+		// Source
 		$sourceid = $eventhash['sourceid'];
 		$sourcenamesql = mysql_query("SELECT name FROM $sourcetype WHERE $id = \"$sourceid\"",$mysql);
-		$sourcename = mysql_fetch_row($sourcenamesql);
+		$sourcenameres = mysql_fetch_row($sourcenamesql);
+		$sourcename = $sourcenameres[0];
 
-		Print "Source: $sourcename[0]";
+		// Destination
+		$destid = $eventhash['destid'];
+		$destnamesql = mysql_query("SELECT name FROM $desttype WHERE $id = \"$destid\"",$mysql);
+		$destnameres = mysql_fetch_row($destnamesql);
+		$destname = $destnameres[0];
+
+		// Action
+		if ($eventhash['actionid'] = 'A') {
+			$actionid = "Attack";
+		} elseif ($eventhash['actionid'] = 'H') {
+			$actionid = "Held Action";
+		} elseif ($eventhash['actionid'] = 'S') {
+			$actionid = "Spell";
+		} elseif ($eventhash['actionid'] = 'I') {
+			$actionid = "Item Used";
+		}
+
+		$crap = $eventhash['desttype'];
+		print "Source: $sourcename<br>";
+		print "$crap<br>";
+		print "Dest: SELECT name FROM $desttype WHERE $id = \"$destid\"<br>";
+		print "Action: $actionid<br>";
 	}
 }
 
