@@ -49,6 +49,7 @@ if ($gameid && $eventid) {
 	$rounddate = 0;
 	print "Results for $eventid";
 	while ($eventhash = mysql_fetch_assoc($eventsql)) {
+		// Sort out what tables to query against (pc vs monster)
 		if ($eventhash['sourcetype'] == "P") {
 			$sourcetype = "playercharacter";
 			$sid = "pcid";
@@ -125,7 +126,7 @@ if ($gameid && $eventid) {
 		$break = " ";
 		$roundannounce = "";
 		if ($date != $rounddate) {
-			$roundannounce = "Round $roundnumber @ $date<br>";
+			$roundannounce = "Round $roundnumber @ $date by $enterer<br>";
 			$roundnumber++;
 			$break = "<hr>";
 		}
