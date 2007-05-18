@@ -30,7 +30,7 @@ if ($gameid && !$eventid) {
 	print "<select name=\"eventid\">";
 	$eventidsql = mysql_query("SELECT DISTINCT st.eventid,g.name,st.date FROM stattally st JOIN game g USING(gameid) WHERE st.gameid = g.gameid AND st.gameid = \"$gameid\" GROUP BY st.eventid ASC",$mysql);
 	while (list($eventid,$gamename,$date) = mysql_fetch_row($eventidsql)) {
-		$roundnumbersql = mysql_query("SELECT COUNT(*) FROM stattally WHERE eventid=\"$eventid\"",$mysql);
+		$roundnumbersql = mysql_query("SELECT COUNT(DISTINCT date) FROM stattally WHERE eventid=\"$eventid\"",$mysql);
 		$roundnumber = mysql_fetch_row($roundnumbersql);
 		print "<option value=\"$eventid\">$gamename ($roundnumber[0] rounds) @ $date</option>";
 	}
