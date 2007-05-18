@@ -43,7 +43,6 @@ if ($gameid && !$eventid) {
 }
 
 if ($gameid && $eventid) {
-	print "Details for $eventid:<br>";
 	$eventsql = mysql_query("SELECT st.sourcetype,st.sourceid,st.desttype,st.destid,st.actionid,sp.name AS spell,it.name AS item,st.hpadj,st.sthrow,st.destkill,st.date,st.enterer,st.hpadjtype FROM stattally st LEFT JOIN spell sp ON st.spellid = sp.id  LEFT JOIN item it ON st.itemid = it.id  WHERE st.eventid=\"$eventid\"",$mysql);
 	// And it starts.. :\
 	$roundnumber = 0;

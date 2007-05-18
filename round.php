@@ -35,7 +35,7 @@ if (!$gameid) {
 
 if ($gameid) {
 	
-	if (!$eventid || $eventidreset = '1') {
+	if (!$eventid || $eventidreset == '1') {
 		$eventid = time();
 	}
 	
