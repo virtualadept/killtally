@@ -22,7 +22,7 @@ $kill = $_POST['kill'];
 if (!$gameid) {
         print "Welcome $username!<br><br>";
         print "First off, please select which game you wish to administer: ";
-        print "<form action=\"round.php\" method=\"post\"><br>";
+        print "<form action=\"index.php\" method=\"post\"><br>";
         print "<select name=\"gameid\">";
         $game = mysql_query("SELECT * FROM game where active=\"1\" ORDER BY name ASC", $mysql);
         while (list($gameid, $gamename) = mysql_fetch_row($game)) {
@@ -74,7 +74,7 @@ if ($gameid) {
 	}
 
 	// EventID with Reset Button
-	print "<form action=\"round.php\" method=\"post\">";
+	print "<form action=\"index.php\" method=\"post\">";
 	print "<input type=\"hidden\" name=\"eventidreset\" value=\"1\">";
 	print "<input type=\"hidden\" name=\"gameid\" value=\"$gameid\">";
 	print "Welcome $username, the EncounterID is <b>$eventid</b> <input type=\"submit\" value=\"New Encounter?\"><br>";
@@ -83,10 +83,10 @@ if ($gameid) {
 	// What game are we playing?
         $gamesql = mysql_query("SELECT name FROM game WHERE gameid=\"$gameid\"", $mysql);
         $gamename = mysql_fetch_row($gamesql);
-        print "You are currently running <b>$gamename[0]</b> (<a href=\"round.php\">change</a>)<br>";
+        print "You are currently running <b>$gamename[0]</b> (<a href=\"index.php\">change</a>)<br>";
 	
 	// Start the Form of D00m
-	print "<form action=\"round.php\" method=\"post\">";
+	print "<form action=\"index.php\" method=\"post\">";
 
 	// Put the enter button up here so people on laptops dont have to scroll
 	print "<br><input type=\"submit\" value=\"Enter Round Data\"><-- This is here so you dont have to scroll down";
