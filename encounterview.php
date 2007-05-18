@@ -32,7 +32,13 @@ if ($gameid && !$eventid) {
 	while (list($eventid,$gamename,$date) = mysql_fetch_row($eventidsql)) {
 		$roundnumbersql = mysql_query("SELECT COUNT(DISTINCT date) FROM stattally WHERE eventid=\"$eventid\"",$mysql);
 		$roundnumber = mysql_fetch_row($roundnumbersql);
-		print "<option value=\"$eventid\">$gamename ($roundnumber[0] rounds) @ $date</option>";
+		// Yes, i'm that anal while drunk
+		if ($roundnumber[0] > 1) {
+			$roundword = "rounds";
+		} else {
+			$roundword = "round";
+		}
+		print "<option value=\"$eventid\">$gamename ($roundnumber[0] $roundword) @ $date</option>";
 	}
 	print "</select>";
 	print "<br>";
