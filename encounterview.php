@@ -25,7 +25,7 @@ if (!$gameid) {
 }
 
 if ($gameid && !$eventid) {
-	print "Please Select EncounterID to view: ";
+	print "Please select encounter to view: ";
 	print "<form action=\"encounterview.php\">";
 	print "<select name=\"eventid\">";
 	$eventidsql = mysql_query("SELECT DISTINCT st.eventid,g.name,st.date FROM stattally st JOIN game g USING(gameid) WHERE st.gameid = g.gameid AND st.gameid = \"$gameid\" GROUP BY st.eventid ASC",$mysql);
