@@ -45,7 +45,9 @@ if ($gameid && !$eventid) {
 if ($gameid && $eventid) {
 	$eventsql = mysql_query("SELECT st.sourcetype,st.sourceid,st.desttype,st.destid,st.actionid,sp.name AS spell,it.name AS item,st.hpadj,st.sthrow,st.destkill,st.date,st.enterer,st.hpadjtype FROM stattally st LEFT JOIN spell sp ON st.spellid = sp.id  LEFT JOIN item it ON st.itemid = it.id  WHERE st.eventid=\"$eventid\"",$mysql);
 	// And it starts.. :\
-	$roundnumber = 0;
+	$roundnumber = 1;
+	$rounddate = 0;
+	print "Results for $eventid";
 	while ($eventhash = mysql_fetch_assoc($eventsql)) {
 		if ($eventhash['sourcetype'] == "P") {
 			$sourcetype = "playercharacter";
@@ -109,8 +111,8 @@ if ($gameid && $eventid) {
 		}
 
 		// Killed?
-		if ($eventhash['sthrow'] == 'Y') {
-			$destkill = "Killed";
+		if ($eventhash['destkill'] == 'Y') {
+			$destkill = "->Killed<-";
 		}
 
 		// Date
@@ -120,12 +122,19 @@ if ($gameid && $eventid) {
 		$enterer = $eventhash['enterer'];
 
 		// Round Number
-		$roundnumber++;
+		$break = " ";
+		$roundannounce = "";
+		if ($date != $rounddate) {
+			$roundannounce = "Round $roundnumber @ $date<br>";
+			$roundnumber++;
+			$break = "<hr>";
+		}
+		$rounddate = $date;	
 
-		
-		print "Round $roundnumber @ $date<br>";
-		print "$sourcename does $actionid $spellname $itemname to $destname causing $hpadj $hpadjtype ($sthrow, $destkill)<br>";
-		print "<hr>";
+		// Print this shit out
+		print "$break";
+		print "$roundannounce";
+		print "$sourcename does $actionid $spellname $itemname to $destname for $hpadj $hpadjtype <b>$sthrow $destkill</b><br>";
 		
 	}
 }
