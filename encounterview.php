@@ -63,52 +63,94 @@ sourcetype: P
 
 if ($gameid && $eventid) {
 	print "Details for $eventid:<br>";
-	$eventsql = mysql_query("SELECT st.sourceid,st.actionid,sp.name AS spell,it.name AS item,st.destid,st.hpadj,st.sthrow,st.destkill,st.date,st.enterer,st.sourcetype,st.desttype,st.hpadjtype FROM stattally st LEFT JOIN spell sp ON st.spellid = sp.id  LEFT JOIN item it ON st.itemid = it.id  WHERE eventid=\"$eventid\"",$mysql);
+	$eventsql = mysql_query("SELECT st.sourcetype,st.sourceid,st.desttype,st.destid,st.actionid,sp.name AS spell,it.name AS item,st.hpadj,st.sthrow,st.destkill,st.date,st.enterer,st.hpadjtype FROM stattally st LEFT JOIN spell sp ON st.spellid = sp.id  LEFT JOIN item it ON st.itemid = it.id  WHERE st.eventid=\"$eventid\"",$mysql);
 	// And it starts.. :\
 	while ($eventhash = mysql_fetch_assoc($eventsql)) {
-		if ($eventhash['sourcetype'] = "P") {
+		if ($eventhash['sourcetype'] == "P") {
 			$sourcetype = "playercharacter";
-			$id = "pcid";
-		} else {
+			$sid = "pcid";
+		} elseif ($eventhash['sourcetype'] == "M") {
 			$sourcetype = "monster";
-			$id = "id";
+			$sid = "id";
 		}
-		if ($eventhash['desttype'] = "P") {
+		if ($eventhash['desttype'] == "P") {
 			$desttype = "playercharacter";
-			$id = "pcid";
-		} else {
+			$did = "pcid";
+		} elseif ($eventhash['desttype'] == "M") {
 			$desttype = "monster";
-			$id = "id";
+			$did = "id";
 		}
 		
 		// Source
 		$sourceid = $eventhash['sourceid'];
-		$sourcenamesql = mysql_query("SELECT name FROM $sourcetype WHERE $id = \"$sourceid\"",$mysql);
+		$sourcenamesql = mysql_query("SELECT name FROM $sourcetype WHERE $sid = \"$sourceid\"",$mysql);
 		$sourcenameres = mysql_fetch_row($sourcenamesql);
 		$sourcename = $sourcenameres[0];
 
 		// Destination
 		$destid = $eventhash['destid'];
-		$destnamesql = mysql_query("SELECT name FROM $desttype WHERE $id = \"$destid\"",$mysql);
+		$destnamesql = mysql_query("SELECT name FROM $desttype WHERE $did = \"$destid\"",$mysql);
 		$destnameres = mysql_fetch_row($destnamesql);
 		$destname = $destnameres[0];
-
+	
 		// Action
-		if ($eventhash['actionid'] = 'A') {
+		if ($eventhash['actionid'] == 'A') {
 			$actionid = "Attack";
-		} elseif ($eventhash['actionid'] = 'H') {
+		} elseif ($eventhash['actionid'] == 'H') {
 			$actionid = "Held Action";
-		} elseif ($eventhash['actionid'] = 'S') {
+		} elseif ($eventhash['actionid'] == 'S') {
 			$actionid = "Spell";
-		} elseif ($eventhash['actionid'] = 'I') {
+		} elseif ($eventhash['actionid'] == 'I') {
 			$actionid = "Item Used";
 		}
 
-		$crap = $eventhash['desttype'];
+		// Spell
+		$spellname = $eventhash['spell'];
+
+		// Item
+		$itemname = $eventhash['item'];
+
+		// HP Adjustment
+		$hpadj = $eventhash['hpadj'];
+		
+		// HP Adjustment Type
+		if ($eventhash['hpadjtype'] == 'D') {
+			$hpadjtype = "Damage";
+		} elseif ($eventhash['hpadjtype'] == 'H') {
+			$hpadjtype = "Healed";
+		}
+
+		// Saving Throws
+		if ($eventhash['sthrow'] == 'M') {
+			$sthrow = "Made";
+		} elseif ($eventhash['sthrow'] == 'F') {
+			$sthrow = "Failed";
+		}
+
+		// Killed?
+		if ($eventhash['sthrow'] == 'Y') {
+			$destkill = "Killed";
+		}
+
+		// Date
+		$date = $eventhash['date'];
+
+		// Enterer
+		$enterer = $eventhash['enterer'];
+
+
+		print "On $date by $enterer<br>";
 		print "Source: $sourcename<br>";
-		print "$crap<br>";
-		print "Dest: SELECT name FROM $desttype WHERE $id = \"$destid\"<br>";
-		print "Action: $actionid<br>";
+		print "Dest: $destname<br>";
+	 	print "Action: $actionid<br>";
+		print "Spell: $spellname<br>";
+		print "Item: $itemname<br>";
+		print "HP Adj: $hpadj<br>";
+		print "Save: $sthrow<br>";
+		print "$hpadjtype: $hpadj<br>";
+		print "killed: $destkill<br><br>";
+		
+		print_r($eventhash);
 	}
 }
 
