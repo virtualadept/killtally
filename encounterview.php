@@ -30,7 +30,9 @@ if ($gameid && !$eventid) {
 	print "<select name=\"eventid\">";
 	$eventidsql = mysql_query("SELECT DISTINCT st.eventid,g.name,st.date FROM stattally st JOIN game g USING(gameid) WHERE st.gameid = g.gameid AND st.gameid = \"$gameid\" ORDER BY st.eventid ASC",$mysql);
 	while (list($eventid,$gamename,$date) = mysql_fetch_row($eventidsql)) {
-		print "<option value=\"$eventid\">$gamename @ $date</option>";
+		$roundnumbersql = mysql_query("SELECT COUNT(*) FROM stattally WHERE eventid=\"$eventid\"",$mysql);
+		$roundnumber = mysql_fetch_row($roundnumbersql);
+		print "<option value=\"$eventid\">$gamename ($roundnumber[0] rounds) @ $date</option>";
 	}
 	print "</select>";
 	print "<br>";
@@ -40,31 +42,11 @@ if ($gameid && !$eventid) {
 
 }
 
-/*
-        id: 105
-   eventid: 1179336497
-  sourceid: 2
-  actionid: S
-   spellid: 95
-    itemid: 0
-    destid: 648
-     hpadj: 0
-    sthrow: F
-  destkill: Y
-      date: 2007-05-16 10:28:17
-   enterer: brandon
-sourcetype: P
-  desttype: M
-    gameid: 2
- hpadjtype: NULL
-1 row in set (0.00 sec)
-*/
-
-
 if ($gameid && $eventid) {
 	print "Details for $eventid:<br>";
 	$eventsql = mysql_query("SELECT st.sourcetype,st.sourceid,st.desttype,st.destid,st.actionid,sp.name AS spell,it.name AS item,st.hpadj,st.sthrow,st.destkill,st.date,st.enterer,st.hpadjtype FROM stattally st LEFT JOIN spell sp ON st.spellid = sp.id  LEFT JOIN item it ON st.itemid = it.id  WHERE st.eventid=\"$eventid\"",$mysql);
 	// And it starts.. :\
+	$roundnumber = 0;
 	while ($eventhash = mysql_fetch_assoc($eventsql)) {
 		if ($eventhash['sourcetype'] == "P") {
 			$sourcetype = "playercharacter";
@@ -122,9 +104,9 @@ if ($gameid && $eventid) {
 
 		// Saving Throws
 		if ($eventhash['sthrow'] == 'M') {
-			$sthrow = "Made";
+			$sthrow = "Made Save";
 		} elseif ($eventhash['sthrow'] == 'F') {
-			$sthrow = "Failed";
+			$sthrow = "Failed Save";
 		}
 
 		// Killed?
@@ -138,19 +120,14 @@ if ($gameid && $eventid) {
 		// Enterer
 		$enterer = $eventhash['enterer'];
 
+		// Round Number
+		$roundnumber++;
 
-		print "On $date by $enterer<br>";
-		print "Source: $sourcename<br>";
-		print "Dest: $destname<br>";
-	 	print "Action: $actionid<br>";
-		print "Spell: $spellname<br>";
-		print "Item: $itemname<br>";
-		print "HP Adj: $hpadj<br>";
-		print "Save: $sthrow<br>";
-		print "$hpadjtype: $hpadj<br>";
-		print "killed: $destkill<br><br>";
 		
-		print_r($eventhash);
+		print "Round $roundnumber @ $date<br>";
+		print "$sourcename does $actionid $spellname $itemname to $destname causing $hpadj $hpadjtype ($sthrow, $destkill)<br>";
+		print "<hr>";
+		
 	}
 }
 
